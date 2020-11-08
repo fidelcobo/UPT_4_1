@@ -15,7 +15,7 @@ def generar_oferta_cliente(datos_clases: List[FullElementosOferta], datos_genera
     produce coincidencia de fabricante, código y fechas de principio y fin del servicio
     :param datos_clases: Lista de entradas consolidadas de la oferta
     :param datos_generales: Nombre de la oferta, del cliente, BID y AM
-    :param instance:
+    :param instance: Clase Qt5 de origen. Usado para enviar mensajes de pantalla al usuario
     :return: Fichero oferta_cliente.xlsx de oferta
     """
 
@@ -35,6 +35,7 @@ def generar_oferta_cliente(datos_clases: List[FullElementosOferta], datos_genera
 
 
 def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGenerales, instance):
+
     # Comenzamos definiendo los parámetros de filas y columnas de la plantilla de oferta
     FIRST_ROW = 22
     fabricante = 'B'
