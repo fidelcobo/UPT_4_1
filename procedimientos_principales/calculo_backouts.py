@@ -157,8 +157,7 @@ def calculo_backouts(fich_a, light, instance):
 
         # Finalmente, completamos los datos de la tabla_datos_cisco consultando al API de Didata los costes del GDC
         padre.signals.informacion.emit('Consultando costes de GDC al API')
-        mensaje_api = request_gdc_cost_list(
-            tabla_datos_cisco)  # Este procedimiento escribe sobre la propia tabla los precios GDC
+        mensaje_api = request_gdc_cost_list(tabla_datos_cisco)  # Este procedimiento escribe sobre la propia tabla los precios GDC
 
         if mensaje_api != 'OK':  # La consulta con el API no ha resultado correcta
             # Notificamos el error. El coste del GDC queda a cero

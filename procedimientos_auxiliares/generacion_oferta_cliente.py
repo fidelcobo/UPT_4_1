@@ -1,11 +1,11 @@
 # Este fichero contiene sólo procedimientos para hacer la oferta de cliente. Nuevo en V4
-
+from PyQt5 import QtWidgets
 import openpyxl
 from typing import List
 from aux_class import ElementosOferta, DatosGenerales, FullElementosOferta
 import os
 from os.path import dirname
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def generar_oferta_cliente(datos_clases: List[FullElementosOferta], datos_generales, instance):
@@ -27,13 +27,14 @@ def generar_oferta_cliente(datos_clases: List[FullElementosOferta], datos_genera
                                element.end_date, element.uptime, pvp_total)
         lista_articulos_oferta.append(item)
 
-    lista_articulos_oferta.sort(key=lambda x: x.manufacturer)
-    book = hacer_libro_de_oferta_de_cliente(lista_articulos_oferta, datos_generales)
-    book.close()
+    lista_articulos_oferta.sort(key=lambda x: x.manufacturer)  # Ordenación alfabética por fabricante
+    book = hacer_libro_de_oferta_de_cliente(lista_articulos_oferta, datos_generales, instance)
+    if book:
+        book.close()
     return book
 
 
-def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGenerales):
+def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGenerales, instance):
     # Comenzamos definiendo los parámetros de filas y columnas de la plantilla de oferta
     FIRST_ROW = 22
     fabricante = 'B'
@@ -43,7 +44,7 @@ def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGene
     fecha_inicio = 'AC'
     fecha_fin = 'AH'
     importe = 'AM'
-    precio_total_oferta = 'AM51'
+    columna_precio_total_oferta = 'AM'
 
     quote_name = 'L6'
     cliente = 'L7'
@@ -51,17 +52,38 @@ def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGene
     version = 'R9'
     am = 'T11'
     propuesta = 'B18'
-    fecha = 'AM56'
+    duracion_oferta = 'AL13'
+    fecha_limite_validez = 'AL14'
+    columna_fecha = 'AM'
+    columna_guia = 'AH'
     base_dir = dirname(os.path.abspath(os.path.dirname(__file__)))
     template_file = os.path.join(base_dir + '/template_oferta_cliente.xlsx')
 
     total = 0
 
-    # Abrimos el libro y lo rellenamos con los datos de las lista recibidas
+    # Abrimos el libro
     try:
-        book = openpyxl.load_workbook(template_file, data_only=False)
+        book = openpyxl.load_workbook(template_file, data_only=True)
         sheet = book.get_sheet_by_name('OFERTA CLIENTE')
 
+        # Ahora buscamos el máximo número de ítems de la plantilla
+        max_items = 0
+        for i in range(1000):  # Como mucho, 1000
+            row = str(FIRST_ROW + i)
+            celda = columna_guia + str(row)
+            if sheet[celda].value == 'Total Venta (EUR)':
+                max_items = i - 4
+                break
+        if max_items == 0:  # El template de formato de oferta falla
+            print('Template de formato de oferta incorrecto')
+            return None
+
+        # Verificamos si el número máximo de ítems es compatible con la oferta
+        if max_items < len(lista_elementos):
+            instance.signals.error_fichero.emit("Demasiados ítems. \nNo se ha generado oferta de cliente")
+            return None
+
+        # Como está en orden, rellenamos con los datos de las lista recibidas
         for i in range(len(lista_elementos)):
             row = str(FIRST_ROW + i)
             sheet[fabricante + row] = lista_elementos[i].manufacturer  # Escribimos el fabricante
@@ -73,7 +95,36 @@ def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGene
             sheet[importe + row] = lista_elementos[i].total_price  # Precio total
             total += lista_elementos[i].total_price
 
-        sheet[precio_total_oferta] = total
+        # Ahora buscamos el máximo número de ítems de la plantilla
+        max_items = 0
+        for i in range(1000):  # Como mucho, 1000
+            row = str(FIRST_ROW + i)
+            celda = columna_guia + str(row)
+            if sheet[celda].value == 'Total Venta (EUR)':
+                max_items = i - 4
+                break
+        if max_items == 0:
+            return None
+
+        # Marcamos ahora el total de la oferta
+        fila_precio_total = max_items + FIRST_ROW + 4
+        celda_precio_total = str(columna_precio_total_oferta) + str(fila_precio_total)
+        sheet[celda_precio_total] = total
+
+        # Y ahora las fechas
+        fila_fecha = max_items + FIRST_ROW + 9
+        celda_fecha = str(columna_fecha) + str(fila_fecha)
+        sheet[celda_fecha] = datetime.today()  # La fecha de ejecución del programa
+        validez_oferta = timedelta(days=sheet[duracion_oferta].value)
+        sheet[fecha_limite_validez] = datetime.today() + validez_oferta  # La fecha máxima de validez de la oferta
+
+        # Ya hemos rellenado los datos de los ítems de la oferta. Ahora hay que arreglar el formato
+        # Se trata de borrar las filas sobrantes para que el formato quede bien.
+        num_filas_a_borrar = max_items - len(lista_elementos)
+        if num_filas_a_borrar > (max_items - 25):  # Dejamos al menos 25 líneas si la oferta es pequeña
+            num_filas_a_borrar = max_items - 25
+        fila_comienzo = FIRST_ROW + len(lista_elementos) + 1
+        sheet.delete_rows(fila_comienzo, num_filas_a_borrar)
 
         # Ahora ponemos los datos generales de la oferta
         sheet[quote_name] = datos_generales.nombre_oferta
@@ -82,8 +133,6 @@ def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGene
         sheet[version] = datos_generales.version
         sheet[am] = datos_generales.am.value
         sheet[propuesta] = datos_generales.nombre_oferta
-        hoy = datetime.today()
-        sheet[fecha] = hoy
         book.close()
         return book
 

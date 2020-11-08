@@ -203,6 +203,7 @@ class Mantenimiento(QtWidgets.QDialog, Ui_Maintenance_Dialog):
                 get_csv.signals.error_fichero.connect(self.notif_error)
                 get_csv.signals.fin_OK_csv.connect(self.finalizar_csv)
                 get_csv.signals.informacion.connect(self.reportar)
+                get_csv.signals.warning.connect(self.notif_warning)
                 # get_csv.signals.error_oferta.connect(self.fallo_oferta)
 
                 self.threadpool.start(get_csv)
