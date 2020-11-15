@@ -96,17 +96,6 @@ def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGene
             sheet[importe + row] = lista_elementos[i].total_price  # Precio total
             total += lista_elementos[i].total_price
 
-        # Ahora buscamos el máximo número de ítems de la plantilla
-        max_items = 0
-        for i in range(1000):  # Como mucho, 1000
-            row = str(FIRST_ROW + i)
-            celda = columna_guia + str(row)
-            if sheet[celda].value == 'Total Venta (EUR)':
-                max_items = i - 4
-                break
-        if max_items == 0:
-            return None
-
         # Marcamos ahora el total de la oferta
         fila_precio_total = max_items + FIRST_ROW + 4
         celda_precio_total = str(columna_precio_total_oferta) + str(fila_precio_total)
