@@ -1,5 +1,4 @@
 # Este fichero contiene sólo procedimientos para hacer la oferta de cliente. Nuevo en V4
-from PyQt5 import QtWidgets
 import openpyxl
 from typing import List
 from aux_class import ElementosOferta, DatosGenerales, FullElementosOferta
@@ -35,6 +34,16 @@ def generar_oferta_cliente(datos_clases: List[FullElementosOferta], datos_genera
 
 
 def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGenerales, instance):
+    """
+    Éste es un procedimiento auxiliar de generar_oferta_cliente. Realiza la composición del book Excel de la
+    oferta de cliente partiendo de los datos de la misma. Asimismo, ajusta la longitud de filas Excel de la
+    oferta para que quede presentable y escribe la fecha actual de composición.
+
+    :param lista_elementos: Ítems de la oferta
+    :param datos_generales: Nombre del cliente, proyecto, BID, AM
+    :param instance: Usado para enviar pantalla de error en caso de una oferta demasiado grande
+    :return: libro Excel con oferta de cliente (openpyxl.Workbook)
+    """
 
     # Comenzamos definiendo los parámetros de filas y columnas de la plantilla de oferta
     FIRST_ROW = 22
