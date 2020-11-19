@@ -107,37 +107,6 @@ def buscar_en_tabla_cisco(codigo, sla, tabla_datos_cisco):
     return encontrado, backout, price, eos, coste_interno, smt, coste_gdc
 
 
-# def request_gdc_cost(sku, serv_lev):
-#     """
-#     :Este procedimiento consulta al API de Didata y devuelve el valor de coste del GDC
-#     :del artículo sku y servicio serv_lev. Si falla la conexión o tarda mucho, devuelve 0
-#     :param sku: Código del artículo
-#     :param serv_lev: Servicios de mantenimiento requerido
-#     :return: Coste del GDC 2 para el mantenimiento
-#     """
-#
-#     req_dict = {'Manufacturer': 'Cisco', 'ManufacturerPartNumber': sku}
-#     req_list = [req_dict]
-#     try:
-#         resp = requests.post(url, headers=headers, json=req_list, timeout=100)
-#         if resp.status_code == 200:
-#             lista_servicios = resp.json()
-#             catalogo = lista_servicios[0]['RemoteServiceCatalog']  # Una lista con los costes de cada servicio remoto
-#             # Es una lista de diccionarios, que indica la disponibilidad de cada servicio proactivo
-#             # availability = lista_servicios['Availability']
-#             gdc = 'GDC 2'
-#             for item in catalogo:
-#                 if (item['ServicePartNumber'].lower() == serv_lev) and (item['DeliveryOwner'] == gdc):
-#                     return round(float(item['CombinedPrice']))
-#             return 0
-#
-#         else:
-#             return 0
-#
-#     except requests.exceptions.ReadTimeout:
-#         print('Esto va muy lento. E bazura')
-#         return 0
-
 def fraccionar_lista(lista_entrada: list, size: int):
     """
     Este procedimiento toma una lista_entrada, la fracciona en sublistas de longitud size (excepto la última) y genera otra
