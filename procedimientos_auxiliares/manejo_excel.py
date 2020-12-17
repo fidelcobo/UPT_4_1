@@ -77,15 +77,15 @@ def pass_to_excel(datos_clases: List[FullElementosOferta], moneda:str, instance)
                 hoja['O' + fila] = wpl
                 hoja['O' + fila_sig] = wpl
                 try:
-                    unit_price = float(articulo.total_unit_price) / int(articulo.qty)
+                    unit_price = float(articulo.total_unit_price) # / int(articulo.qty)
                 except ValueError:
                     instance.signals.error_fichero.emit('Fichero no procesable\n Los datos finales de coste'
                                                         ' y PVP no están definidos')
                     return None, False
 
-                unit_cost = float(articulo.total_unit_cost) / int(articulo.qty)
-                unit_cost_back = float(articulo.cost_backout) / int(articulo.qty)
-                unit_sell_back = float(articulo.venta_backout) / int(articulo.qty)
+                unit_cost = float(articulo.total_unit_cost) # / int(articulo.qty)
+                unit_cost_back = float(articulo.cost_backout) # / int(articulo.qty)
+                unit_sell_back = float(articulo.venta_backout) # / int(articulo.qty)
                 hoja['P' + fila_sig] = locale.format_string('%.2f', unit_sell_back)
                 hoja['P' + fila] = locale.format_string('%.2f', unit_price)
                 hoja['Q' + fila] = locale.format_string('%.2f', unit_cost)
