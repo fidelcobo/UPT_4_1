@@ -132,6 +132,15 @@ def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGene
         sheet[version] = datos_generales.version
         sheet[am] = datos_generales.am.value
         sheet[propuesta] = datos_generales.nombre_oferta
+
+        # Finalmente, borramos las líneas sobrantes al final de la oferta para que quede más limpia
+        print(sheet.max_row)
+        # ultima_fila = sheet.max_row
+        # fila_comienzo = fila_fecha + 3
+        # num_filas_a_borrar = fila_comienzo - ultima_fila
+        # sheet.delete_rows(ultima_fila + 1, num_filas_a_borrar)
+
+        # Sólo queda cerrar el libro y devolverlo
         book.close()
         return book
 
