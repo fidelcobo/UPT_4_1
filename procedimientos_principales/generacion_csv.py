@@ -119,9 +119,9 @@ def generacion_csv(oferta, consolidated, oferta_cliente, instance):
                     for r in sheet[cost_back_col + FIRST_ROW:cost_back_col + str(last_row)]]
     venta_backout = [r[0].value
                      for r in sheet[venta_back_col + FIRST_ROW:venta_back_col + str(last_row)]]
-    total_unit_cost = [r[0].value
+    total_cost = [r[0].value
                        for r in sheet[coste_tot_col + FIRST_ROW:coste_tot_col + str(last_row)]]
-    total_unit_price = [r[0].value
+    total_sell_price = [r[0].value
                         for r in sheet[venta_col + FIRST_ROW:venta_col + str(last_row)]]
     backout_name = [r[0].value
                     for r in sheet[back_col + FIRST_ROW:back_col + str(last_row)]]
@@ -140,7 +140,7 @@ def generacion_csv(oferta, consolidated, oferta_cliente, instance):
     # Vamos ahora a ver si tenemos que consolidar los datos. Si es así, invocamos el procedimiento
     # correspondiente
     datos_clases = compactar_datos_oferta(codes, uptime_code, uptime_descr, tech, manufacturer, init_date, end_date,
-                                          duration,  gpl, cost_backout, venta_backout, total_unit_cost, total_unit_price,
+                                          duration,  gpl, cost_backout, venta_backout, total_cost, total_sell_price,
                                           backout_name, qty, serial_no, currency, insert_in_csv, 0, 0)
 
     if consolidated:  # Se precisa consolidar la lista de ítems

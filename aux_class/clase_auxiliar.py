@@ -44,8 +44,8 @@ class ElementosOferta:
 
 class FullElementosOferta(ElementosOferta):
     
-    def __init__(self, uptime_descr, tech, gpl, cost_backout, venta_backout, total_unit_cost,
-                 total_unit_price, backout_name, serial_no, duration, currency,
+    def __init__(self, uptime_descr, tech, gpl, cost_backout, venta_backout, total_cost,
+                 total_sell_price, backout_name, serial_no, duration, currency,
                  in_csv, manufacturer, code, qty, init_date, end_date, uptime, total_price):
         super().__init__(in_csv, manufacturer, code, qty, init_date, end_date, uptime, total_price)
 
@@ -55,8 +55,8 @@ class FullElementosOferta(ElementosOferta):
         self.gpl = gpl
         self.cost_backout = cost_backout
         self.venta_backout = venta_backout
-        self.total_unit_cost = total_unit_cost
-        self.total_unit_price = total_unit_price
+        self.total_cost = total_cost
+        self.total_sell_price = total_sell_price
         self.backout_name = backout_name
         self.serial_no = serial_no
         self.currency = currency

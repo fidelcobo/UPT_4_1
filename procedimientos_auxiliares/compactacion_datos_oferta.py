@@ -13,7 +13,7 @@ def compactar_datos_oferta(*args):
         item = FullElementosOferta(code=args[0][i], uptime=args[1][i], uptime_descr=args[2][i],
                                    tech=args[3][i], manufacturer=args[4][i], init_date=args[5][i],
                                    end_date=args[6][i], duration=args[7][i], gpl=args[8][i], cost_backout=args[9][i],
-                                   venta_backout=args[10][i], total_unit_cost=args[11][i], total_unit_price=args[12][i],
+                                   venta_backout=args[10][i], total_cost=args[11][i], total_sell_price=args[12][i],
                                    backout_name=args[13][i], qty=args[14][i], serial_no=args[15][i],
                                    currency=args[16][i], in_csv=args[17][i], total_price=0)
 
