@@ -113,6 +113,7 @@ def hacer_libro_de_oferta_de_cliente(lista_elementos, datos_generales: DatosGene
         # Y ahora las fechas
         fila_fecha = max_items + FIRST_ROW + 9
         celda_fecha = str(columna_fecha) + str(fila_fecha)
+        sheet[celda_fecha].number_format = 'dd/mm/yyyy'  # Fijamos el formato de la celda de fecha
         sheet[celda_fecha] = datetime.today()  # La fecha de ejecución del programa
         validez_oferta = timedelta(days=sheet[duracion_oferta].value)
         sheet[fecha_limite_validez] = datetime.today() + validez_oferta  # La fecha máxima de validez de la oferta
