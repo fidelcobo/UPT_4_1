@@ -207,7 +207,7 @@ def calculo_backouts(fich_a, light, instance):
                 not_found_codes.append(not_found)
 
     libro_auxiliar = Workbook()
-    hoja_aux = libro_auxiliar.get_active_sheet()
+    hoja_aux = libro_auxiliar.active
 
     if aux_file_list:
         # Creamos un fichero Excel que guardará los datos de SKU, PSS, Smartnet y precios de lista que encontraremos en

@@ -40,12 +40,13 @@ def generacion_csv(oferta, consolidated, oferta_cliente, instance):
         libro_oferta = openpyxl.load_workbook(file_ramon, data_only=True)
         sheet = libro_oferta.get_sheet_by_name('Quote_Detail')
 
-    except:
+    except Exception as e:
+        print(e)
         text = 'Fichero de oferta {} \nno procesable \n Elija otro.'.format(file_ramon)
         instance.signals.error_fichero.emit(text)
         return
 
-    # Buscanos ahora en qué columnas está la información relevante. Lo haremos en varias tandas
+    # Buscamos ahora en qué columnas está la información relevante. Lo haremos en varias tandas
 
     instance.signals.informacion.emit('Procesando oferta')
 
