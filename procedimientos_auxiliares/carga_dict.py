@@ -35,7 +35,7 @@ def formar_diccionarios():
     filename = os.path.join(direct, 'listas.xlsx')
 
     libro = openpyxl.load_workbook(filename)
-    hoja = libro.get_active_sheet()
+    hoja = libro.active
 
     last_row = str(get_ultima_fila(hoja, SERV))
 

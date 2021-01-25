@@ -145,7 +145,7 @@ def csv_from_excel(entrada, salida, instance):
     while not ok:
         try:
             wb = openpyxl.load_workbook(entrada)
-            sh = wb.get_active_sheet()  # or wb.sheet_by_name('name_of_the_sheet_here')
+            sh = wb.active  # or wb.sheet_by_name('name_of_the_sheet_here')
 
             with open(salida, 'w', newline='') as f:
                 c = csv.writer(f, dialect='excel', delimiter=';')
