@@ -16,7 +16,7 @@ def compactar_datos_oferta(*args):
                                    venta_backout=args[10][i], total_cost=args[11][i], total_sell_price=args[12][i],
                                    backout_name=args[13][i], qty=args[14][i], serial_no=args[15][i],
                                    currency=args[16][i], in_csv=args[17][i], total_price=0)
-
-        lista_items.append(item)
+        if item.in_csv == 'Yes':  # Corrección de error 25/1/2021
+            lista_items.append(item)
 
     return lista_items
